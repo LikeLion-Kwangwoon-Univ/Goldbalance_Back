@@ -1,5 +1,9 @@
 package KWU.likelion.GoldBalance.domain;
 
+import java.time.LocalDateTime;
+
+import org.springframework.data.annotation.CreatedDate;
+
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 import lombok.Data;
@@ -15,6 +19,13 @@ public class Post { // post table과 mapping될 도메인
 
     // post의 제목 (ex. 피자 vs 치킨)
     private String postTitle;
+
+    // post 생성자가 설정한 비밀번호
+    private String password;
+
+    @CreatedDate
+    // post가 생성된 시각
+    private LocalDateTime createdDateTime;
 
     // vs의 대상 중 왼쪽 개체의 제목
     private String leftSideTitle;
