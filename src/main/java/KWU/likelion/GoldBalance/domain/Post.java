@@ -37,7 +37,7 @@ public class Post { // post table과 mapping될 도메인
     private String leftSideImage;
 
     // vs의 대상 중 왼쪽 개체의 득표수
-    private String leftSideVote;
+    private int leftSideVote;
 
     // vs의 대상 중 오른쪽 개체의 제목
     private String rightSideTitle;
@@ -49,5 +49,5 @@ public class Post { // post table과 mapping될 도메인
     private String rightSideImage;
 
     // vs의 대상 중 오른쪽 개체의 득표수
-    private String rightSideVote;
+    private int rightSideVote;
 }

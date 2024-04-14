@@ -9,6 +9,6 @@ public class Like { // 좋아요를 누를 때마다 오는 request
     // 호출당시 좋아요가 눌린 comment의 id
     private int commentId;
 
-    // 갱신된 좋아요 수?(그냥 1 늘려주면 안되는 건가...?)
+    // 갱신된 좋아요 수
     private int likeCount;
 }
