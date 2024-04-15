@@ -13,4 +13,8 @@ public interface CommentService {
     List<Comment> getAllComment();
     // 댓글 좋아요 메소드
     Comment likeComment(Long commentId);
+    // 특정 댓글의 모든 대댓글 조회
+
+    // 왼쪽 측면에서 가장 좋아요가 많은 댓글
+    // 왼쪽 측면에서 가장 좋아요가 많은 댓글
 }
