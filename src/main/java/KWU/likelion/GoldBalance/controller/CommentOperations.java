@@ -24,6 +24,7 @@ public interface CommentOperations {
     ResponseEntity<MakeComment> submitParentComment(@PathVariable Long postId, @PathVariable Long selectSide, @RequestBody MakeComment makeCommentDto);
 
     // parent_id 에 대한 대댓글 작성
+    //@PostMapping("/{postId}/{selectSide}/comment/{commentId}") 으로 할 것인지 얘기 필요
     @PostMapping("/{postId}/{selectSide}/comment/{commentId}/{parentId}")
     ResponseEntity<MakeComment> submitChildComment(@PathVariable Long postId, @PathVariable Long selectSide,
                                                     @PathVariable Long commentId,@PathVariable Long parentId,
