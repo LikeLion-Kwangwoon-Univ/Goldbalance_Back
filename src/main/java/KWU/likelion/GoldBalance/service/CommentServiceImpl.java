@@ -19,12 +19,27 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
+    public Comment likeComment(Long commentId) {
+        return null;
+    }
+
+    @Override
     public List<Comment> getAllComment() {
         return null;
     }
 
     @Override
-    public Comment likeComment(Long commentId) {
+    public List<Comment> getAllChildComment(Long commentId) {
+        return null;
+    }
+
+    @Override
+    public Comment getMostLikedCommentLeft() {
+        return null;
+    }
+
+    @Override
+    public Comment getMostLikedCommentRight() {
         return null;
     }
 }
