@@ -21,16 +21,16 @@ public interface CommentOperations {
 
     // 댓글 작성
     @PostMapping("/{postId}/{selectSide}/comment")
-    ResponseEntity<MakeComment> submitParentComments(@PathVariable Long postId, @PathVariable Long selectSide, @RequestBody MakeComment makeCommentDto);
+    ResponseEntity<MakeComment> submitParentComment(@PathVariable Long postId, @PathVariable Long selectSide, @RequestBody MakeComment makeCommentDto);
 
     // parent_id 에 대한 대댓글 작성
     @PostMapping("/{postId}/{selectSide}/comment/{commentId}/{parentId}")
-    ResponseEntity<MakeComment> submitChildComments(@PathVariable Long postId, @PathVariable Long selectSide,
+    ResponseEntity<MakeComment> submitChildComment(@PathVariable Long postId, @PathVariable Long selectSide,
                                                     @PathVariable Long commentId,@PathVariable Long parentId,
                                                     @RequestBody MakeComment makeCommentDto);
 
     // 좋아요 눌렸을 때, 좋아요 수 update
-    @PostMapping("/{postId}/{selectSide}/comment/{commentId}")
+    @PostMapping("/{postId}/{selectSide}/comment/{commentId}/like")
     ResponseEntity<AddLikeCount> updateLikeCount(@PathVariable Long postId,@PathVariable Long commentId, @RequestBody Like likeDto);
 
 }

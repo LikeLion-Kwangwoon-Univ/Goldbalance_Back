@@ -24,12 +24,12 @@ public class CommentController implements CommentOperations{
     }
 
     @Override
-    public ResponseEntity<MakeComment> submitParentComments(Long postId, Long selectSide, MakeComment makeCommentDto) {
+    public ResponseEntity<MakeComment> submitParentComment(Long postId, Long selectSide, MakeComment makeCommentDto) {
         return null;
     }
 
     @Override
-    public ResponseEntity<MakeComment> submitChildComments(Long postId, Long selectSide, Long commentId, Long parentId, MakeComment makeCommentDto) {
+    public ResponseEntity<MakeComment> submitChildComment(Long postId, Long selectSide, Long commentId, Long parentId, MakeComment makeCommentDto) {
         return null;
     }
 
