@@ -23,8 +23,9 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public Post getPost(Long postId) {
-        return null;
+    public Post getPost(int postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 ID: " + postId));
     }
 
     @Override
