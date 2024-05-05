@@ -14,23 +14,26 @@ public interface CommentOperations {
     @GetMapping("/{postId}/comment")
     ResponseEntity<CommentList> getCommentsByPostId(@PathVariable Long postId);
 
-    // comment_id의 parent_id 조회
-    // (parent_id == -1 이면 댓글, parent_id != -1 이면 대댓글)
-    @GetMapping("/{postId}/{selectSide}/comment/{commentId}")
-    ResponseEntity<MakeComment> getChildComments(@PathVariable Long postId, @PathVariable Long selectSide, @PathVariable Long commentId);
+//    // comment_id의 parent_id 조회
+//    // (parent_id == -1 이면 댓글, parent_id != -1 이면 대댓글)
+//    @GetMapping("/{postId}/{selectSide}/comment/{commentId}")
+//    ResponseEntity<MakeComment> getChildComments(@PathVariable Long postId, @PathVariable Long selectSide, @PathVariable Long commentId);
+//
+//    // 댓글 작성
+//    @PostMapping("/{postId}/{selectSide}/comment")
+//    ResponseEntity<MakeComment> submitParentComment(@PathVariable Long postId, @PathVariable Long selectSide, @RequestBody MakeComment makeCommentDto);
+//
+//    // parent_id 에 대한 대댓글 작성
+//    //@PostMapping("/{postId}/{selectSide}/comment/{commentId}") 으로 할 것인지 얘기 필요
+//    @PostMapping("/{postId}/{selectSide}/comment/{commentId}/{parentId}")
+//    ResponseEntity<MakeComment> submitChildComment(@PathVariable Long postId, @PathVariable Long selectSide,
+//                                                    @PathVariable Long commentId,@PathVariable Long parentId,
+//                                                    @RequestBody MakeComment makeCommentDto);
 
-    // 댓글 작성
     @PostMapping("/{postId}/{selectSide}/comment")
-    ResponseEntity<MakeComment> submitParentComment(@PathVariable Long postId, @PathVariable Long selectSide, @RequestBody MakeComment makeCommentDto);
+    ResponseEntity<CommentList> submitComment(@PathVariable Long postId, @PathVariable int selectSide, @RequestBody MakeComment makeCommentDto);
 
-    // parent_id 에 대한 대댓글 작성
-    //@PostMapping("/{postId}/{selectSide}/comment/{commentId}") 으로 할 것인지 얘기 필요
-    @PostMapping("/{postId}/{selectSide}/comment/{commentId}/{parentId}")
-    ResponseEntity<MakeComment> submitChildComment(@PathVariable Long postId, @PathVariable Long selectSide,
-                                                    @PathVariable Long commentId,@PathVariable Long parentId,
-                                                    @RequestBody MakeComment makeCommentDto);
-
-    // 좋아요 눌렸을 때, 좋아요 수 update
+        // 좋아요 눌렸을 때, 좋아요 수 update
     @PostMapping("/{postId}/{selectSide}/comment/{commentId}/like")
     ResponseEntity<AddLikeCount> updateLikeCount(@PathVariable Long postId,@PathVariable Long commentId, @RequestBody Like likeDto);
 

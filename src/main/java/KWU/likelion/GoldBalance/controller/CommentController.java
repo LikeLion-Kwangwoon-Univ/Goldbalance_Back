@@ -26,7 +26,7 @@ public class CommentController implements CommentOperations{
         this.commentService = commentService;
     }
 
-    //Postid 로 모든 댓글 가져 오기 (10개씩?)
+    //Postid 로 모든 댓글 가져 오기 (10개씩? & 대댓글을 리스트로 다 보여줄 것인지 따로 처리해 줄 것인지?)
     @Override
     public ResponseEntity<CommentList> getCommentsByPostId(Long postId) {
         List<Comment> postComments = commentService.getAllComment()
@@ -39,27 +39,59 @@ public class CommentController implements CommentOperations{
     }
 
     @Override
-    public ResponseEntity<MakeComment> getChildComments(Long postId, Long selectSide, Long commentId) {
+    public ResponseEntity<CommentList> submitComment(Long postId, int selectSide, MakeComment makeCommentDto) {
 
-        return null;
-    }
+        // 기존의 댓글 리스트를 가져옴
+        List<Comment> postComments = commentService.getAllComment()
+                .stream()
+                .filter(comment -> Long.valueOf(comment.getPostId()).equals(postId)&& comment.getSideInfo() == selectSide)
+                //postId 가 같고 selectSide 가 같은 것 filtering
+                .collect(Collectors.toList());
 
-    @Override
-    public ResponseEntity<MakeComment> submitParentComment(Long postId, Long selectSide, MakeComment makeCommentDto) {
+        CommentList commentList = new CommentList();
+        commentList.setCommentList(postComments); // 기존의 댓글 리스트를 설정
 
+        if (makeCommentDto.getParentCommentId() == -1) {
+            // 부모 댓글 작성
+            Comment comment = new Comment();
+            comment.setPostId(postId.intValue());
+            comment.setPassword(makeCommentDto.getPassword());
+            comment.setContent(makeCommentDto.getContent());
+            comment.setSideInfo(makeCommentDto.getSideInfo());
+            comment.setParentCommentId(-1); // 부모 댓글의 경우 parentId는 -1
 
-        return null;
-    }
+            Comment savedComment = commentService.createComment(comment);
 
-    @Override
-    public ResponseEntity<MakeComment> submitChildComment(Long postId, Long selectSide, Long commentId, Long parentId, MakeComment makeCommentDto) {
+            // 새로운 댓글을 기존의 CommentList에 추가합니다.
+            commentList.getCommentList().add(savedComment);
+        } else {
+            // 대댓글 작성
+            Comment parentComment = commentService.getComment(makeCommentDto.getParentCommentId());
+            if (parentComment != null && Long.valueOf(parentComment.getPostId()).equals(postId)) {
+                // 부모 댓글이 존재하고, 해당 부모 댓글이 요청된 게시물에 속한 경우에만 대댓글 작성
+                Comment comment = new Comment();
+                comment.setPostId(postId.intValue());
+                comment.setPassword(makeCommentDto.getPassword());
+                comment.setContent(makeCommentDto.getContent());
+                comment.setSideInfo(makeCommentDto.getSideInfo());
+                comment.setParentCommentId(makeCommentDto.getParentCommentId()); // 부모 댓글의 postId를 parentId로 설정
 
-        return null;
+                Comment newComment = commentService.createComment(comment);
+
+                // 새로운 댓글을 기존의 CommentList에 추가
+                commentList.getCommentList().add(newComment);
+            } else {
+                // 부모 댓글이 없거나 요청된 게시물에 속하지 않는 경우 예외 처리
+                return ResponseEntity.badRequest().build();
+            }
+        }
+
+        // 새로운 댓글이 추가된 CommentList를 ResponseEntity로 반환
+        return ResponseEntity.ok(commentList);
     }
 
     @Override
     public ResponseEntity<AddLikeCount> updateLikeCount(Long postId, Long commentId, Like likeDto) {
-
         return null;
     }
 }
