@@ -30,7 +30,8 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public List<Post> getAllPostByNewest() {
-        return null;
+        // 게시물을 생성일자(CreatedDateTime) 기준으로 내림차순 정렬하여 반환
+        return postRepository.findAllByOrderByCreatedDateTimeDesc();
     }
 
     @Override
