@@ -20,7 +20,8 @@ public interface PostOperations {
 
     @GetMapping("/latest") //처음에 모든 정보를 받아 투표의 list를 반환함 - 시간 순
     ResponseEntity<PostList> getPostsSortedByTime();
-
+    @GetMapping("/closest") // 5퍼 내로 차이나는 게시물을 불러올 수 있는 메서드
+    ResponseEntity<PostList> getPostsbyCloseVote();
     @PostMapping("/make") //투표 게시물 저장
     ResponseEntity<String> submitPost(@RequestBody MakePost makePost);
 
