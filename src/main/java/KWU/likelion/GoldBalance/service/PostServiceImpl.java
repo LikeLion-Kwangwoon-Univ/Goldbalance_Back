@@ -36,7 +36,7 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public List<Post> getAllPostByMostComments() {
-        return null;
+        return postRepository.findAllByOrderByCommentsCountDesc();
     }
 
     @Override

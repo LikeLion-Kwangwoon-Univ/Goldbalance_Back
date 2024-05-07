@@ -10,6 +10,7 @@ import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
 
 class PostServiceImplTest {
 
