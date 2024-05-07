@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,16 +28,64 @@ public class CommentController implements CommentOperations{
         this.commentService = commentService;
     }
 
-    //Postid 로 모든 댓글 가져 오기 (10개씩? & 대댓글을 리스트로 다 보여줄 것인지 따로 처리해 줄 것인지?)
+    //Postid 로 모든 댓글 가져 오기 (10개씩? & 대댓글을 리스트로 다 보여줄 것인지 따로 처리해 줄 것인지?),
     @Override
     public ResponseEntity<CommentList> getCommentsByPostId(Long postId) {
-        List<Comment> postComments = commentService.getAllComment()
-                .stream()
-                .filter(comment -> Long.valueOf(comment.getPostId()).equals(postId))
-                .collect(Collectors.toList());
+        // 모든 댓글 가져오기
+        List<Comment> allComments = commentService.getAllComment();
+
+        // 해당 postId에 대한 부모 댓글 및 자식 댓글 분리
+        List<Comment> parentComments = allComments.stream()
+                .filter(comment -> Long.valueOf(comment.getPostId()).equals(postId) && comment.getParentCommentId() == -1)
+                .toList();
+
+        // 각 부모 댓글에 대한 자식 댓글 추가
+        List<Comment> sortedComments = new ArrayList<>();
+        for (Comment parentComment : parentComments) {
+            sortedComments.add(parentComment);
+//            List<Comment> childComments = getChildComments(allComments, parentComment.getId());
+            List<Comment> childComments = commentService.getAllChildComment(parentComment.getId());
+            sortedComments.addAll(childComments);
+        }
+
         CommentList commentList = new CommentList();
-        commentList.setCommentList(postComments);
+        commentList.setCommentList(sortedComments);
         return ResponseEntity.ok(commentList);
+    }
+
+    @Override
+    public ResponseEntity<CommentList> getCommentsByPostIdAndSelectSide(Long postId, int selectSide) {
+        // 모든 댓글 가져오기
+        List<Comment> allComments = commentService.getAllComment();
+
+        // 해당 postId와 selectSide에 대한 부모 댓글 및 자식 댓글 분리
+        List<Comment> parentComments = allComments.stream()
+                .filter(comment -> Long.valueOf(comment.getPostId()).equals(postId) && comment.getSideInfo() == selectSide && comment.getParentCommentId() == -1)
+                .toList();
+
+        // 각 부모 댓글에 대한 자식 댓글 추가
+        List<Comment> sortedComments = new ArrayList<>();
+        for (Comment parentComment : parentComments) {
+            sortedComments.add(parentComment);
+//            List<Comment> childComments = getChildComments(allComments, parentComment.getId());
+            List<Comment> childComments = commentService.getAllChildComment(parentComment.getId());
+            sortedComments.addAll(childComments);
+        }
+
+        CommentList commentList = new CommentList();
+        commentList.setCommentList(sortedComments);
+        return ResponseEntity.ok(commentList);
+
+    }
+
+    @Override
+    public ResponseEntity<CommentList> getParentCommentsByPostIdAndSelectSide(Long postId, int selectSide) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<CommentList> getChildCommentsPostIdAndSelectSide(Long postId, int selectSide) {
+        return null;
     }
 
     @Override

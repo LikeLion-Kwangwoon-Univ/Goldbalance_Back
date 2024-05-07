@@ -48,7 +48,7 @@ public class CommentControllerTest {
         comment2.setId(2);
         comment2.setPostId(postId.intValue());
         comment2.setPassword("pw2");
-        comment2.setContent("post1,comment2");
+        comment2.setContent("post1,comment3");
         comment2.setSideInfo(0);
         comment2.setParentCommentId(-1);
         comments.add(comment2);
@@ -64,6 +64,64 @@ public class CommentControllerTest {
         CommentList commentList = responseEntity.getBody();
         assert commentList != null;
         List<Comment> returnedComments = commentList.getCommentList();
+        assertEquals(comments.size(), returnedComments.size());
+        for (int i = 0; i < comments.size(); i++) {
+            Comment returnedComment = returnedComments.get(i);
+            assertEquals(postId, returnedComment.getPostId());
+            System.out.println(returnedComment);
+        }
+
+        verify(commentService, times(1)).getAllComment();
+    }
+
+    // postId, selectSide 에 해당하는 대댓글 조회
+    @Test
+    public void testGetCommentsByPostIdAndSelectSide() {
+        // Arrange
+        Long postId = 1L;
+        List<Comment> comments=new ArrayList<>();
+
+        //댓글1
+        Comment comment1 = new Comment();
+        comment1.setId(1);
+        comment1.setPostId(postId.intValue());
+        comment1.setPassword("pw1");
+        comment1.setContent("post1,comment1");
+        comment1.setSideInfo(0);
+        comment1.setParentCommentId(-1);
+        comments.add(comment1);
+
+        //댓글2
+        Comment comment2 = new Comment();
+        comment2.setId(2);
+        comment2.setPostId(postId.intValue());
+        comment2.setPassword("pw2");
+        comment2.setContent("post1,comment2");
+        comment2.setSideInfo(0);
+        comment2.setParentCommentId(-1);
+        comments.add(comment2);
+
+        //댓글1의 댓글
+        Comment comment3 = new Comment();
+        comment3.setId(3);
+        comment3.setPostId(postId.intValue());
+        comment3.setPassword("pw1-1");
+        comment3.setContent("post1,comment1-1");
+        comment3.setSideInfo(0);
+        comment3.setParentCommentId(1);
+        comments.add(comment3);
+
+        when(commentService.getAllComment()).thenReturn(comments);
+
+        // Act
+        ResponseEntity<CommentList> responseEntity = this.commentController.getCommentsByPostIdAndSelectSide(postId,0);
+
+        // Assert
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        CommentList commentList = responseEntity.getBody();
+        assert commentList != null;
+        List<Comment> returnedComments = commentList.getCommentList();
+
         assertEquals(comments.size(), returnedComments.size());
         for (int i = 0; i < comments.size(); i++) {
             Comment returnedComment = returnedComments.get(i);
