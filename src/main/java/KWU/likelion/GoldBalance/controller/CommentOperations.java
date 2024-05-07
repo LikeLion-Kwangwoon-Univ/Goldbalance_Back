@@ -10,25 +10,25 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/goldbalance/select")
 public interface CommentOperations {
 
-    // 특정 게시물의 댓글 전체 조회
+    // 특정 게시물의 댓글 전체 조회(모든 side에서의 댓글)
     @GetMapping("/{postId}/comment")
     ResponseEntity<CommentList> getCommentsByPostId(@PathVariable Long postId);
 
-    // comment_id의 parent_id 조회
-    // (parent_id == -1 이면 댓글, parent_id != -1 이면 대댓글)
-    @GetMapping("/{postId}/{selectSide}/comment/{commentId}")
-    ResponseEntity<MakeComment> getChildComments(@PathVariable Long postId, @PathVariable Long selectSide, @PathVariable Long commentId);
+    // 특정 게시물의 댓글 전체 조회(특정 side에서의 댓글)
+    @GetMapping("/{postId}/{selectSide}/comment")
+    ResponseEntity<CommentList> getCommentsByPostIdAndSelectSide(@PathVariable Long postId,@PathVariable int selectSide);
 
-    // 댓글 작성
+    //부모 댓글 조회(?)
+    @GetMapping("/{postId}/{selectSide}/comment/root")
+    ResponseEntity<CommentList> getParentCommentsByPostIdAndSelectSide(@PathVariable Long postId,@PathVariable int selectSide);
+
+    //자식 댓글 조회(?)
+    @GetMapping("/{postId}/{selectSide}/comment/{commentId}/child")
+    ResponseEntity<CommentList> getChildCommentsPostIdAndSelectSide(@PathVariable Long postId,@PathVariable int selectSide);
+
+    //댓글 등록
     @PostMapping("/{postId}/{selectSide}/comment")
-    ResponseEntity<MakeComment> submitParentComment(@PathVariable Long postId, @PathVariable Long selectSide, @RequestBody MakeComment makeCommentDto);
-
-    // parent_id 에 대한 대댓글 작성
-    //@PostMapping("/{postId}/{selectSide}/comment/{commentId}") 으로 할 것인지 얘기 필요
-    @PostMapping("/{postId}/{selectSide}/comment/{commentId}/{parentId}")
-    ResponseEntity<MakeComment> submitChildComment(@PathVariable Long postId, @PathVariable Long selectSide,
-                                                    @PathVariable Long commentId,@PathVariable Long parentId,
-                                                    @RequestBody MakeComment makeCommentDto);
+    ResponseEntity<CommentList> submitComment(@PathVariable Long postId, @PathVariable int selectSide, @RequestBody MakeComment makeCommentDto);
 
     // 좋아요 눌렸을 때, 좋아요 수 update
     @PostMapping("/{postId}/{selectSide}/comment/{commentId}/like")
