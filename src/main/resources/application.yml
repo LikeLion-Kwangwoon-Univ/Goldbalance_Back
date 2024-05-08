@@ -1,10 +1,10 @@
 # MYSQL
 spring:
   datasource:
-    url:
+    url: jdbc:mysql://balance-database.cfbqz6prbj9w.ap-northeast-2.rds.amazonaws.com:3306/balance-database
+    driver-class-name: com.mysql.cj.jdbc.Driver
     username: Likelion_admin
     password: Likelion_project
-    # driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: update
