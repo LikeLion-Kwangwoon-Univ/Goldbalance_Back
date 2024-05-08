@@ -2,8 +2,8 @@
 spring:
   datasource:
     url:
-    username:
-    password:
+    username: Likelion_admin
+    password: Likelion_project
     # driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
