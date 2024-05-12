@@ -42,9 +42,9 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public List<Comment> getAllComment() {
+    public List<Comment> getAllComment(int postId) {
         // 모든 Comment 객체를 조회하여 List<Comment>로 반환
-        return (List<Comment>) commentRepository.findAll();
+        return commentRepository.findByPostId(postId);
     }
 
     @Override
