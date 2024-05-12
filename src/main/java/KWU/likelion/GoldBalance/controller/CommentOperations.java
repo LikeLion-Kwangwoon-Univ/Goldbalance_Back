@@ -18,20 +18,20 @@ public interface CommentOperations {
     @GetMapping("/{postId}/{selectSide}/comment")
     ResponseEntity<CommentList> getCommentsByPostIdAndSelectSide(@PathVariable Long postId,@PathVariable int selectSide);
 
-    //부모 댓글 조회(?)
+    //부모 댓글 조회
     @GetMapping("/{postId}/{selectSide}/comment/root")
     ResponseEntity<CommentList> getParentCommentsByPostIdAndSelectSide(@PathVariable Long postId,@PathVariable int selectSide);
 
-    //자식 댓글 조회(?)
-    @GetMapping("/{postId}/{selectSide}/comment/{commentId}/child")
-    ResponseEntity<CommentList> getChildCommentsPostIdAndSelectSide(@PathVariable Long postId,@PathVariable int selectSide);
+    //자식 댓글 조회
+    @GetMapping("/{postId}/{selectSide}/recomment/{commentId}")
+    ResponseEntity<CommentList> getChildCommentsPostIdAndSelectSide(@PathVariable Long postId,@PathVariable int selectSide,@PathVariable int commentId);
 
     //댓글 등록
-    @PostMapping("/{postId}/{selectSide}/comment")
-    ResponseEntity<CommentList> submitComment(@PathVariable Long postId, @PathVariable int selectSide, @RequestBody MakeComment makeCommentDto);
+    @PostMapping("/comment")
+    ResponseEntity<CommentList> postComment(@RequestBody MakeComment makeCommentDto);
 
     // 좋아요 눌렸을 때, 좋아요 수 update
-    @PostMapping("/{postId}/{selectSide}/comment/{commentId}/like")
-    ResponseEntity<AddLikeCount> updateLikeCount(@PathVariable Long postId,@PathVariable Long commentId, @RequestBody Like likeDto);
+    @PostMapping("/comment/like")
+    ResponseEntity<AddLikeCount> postLikeCount(@RequestBody Like likeDto);
 
 }
