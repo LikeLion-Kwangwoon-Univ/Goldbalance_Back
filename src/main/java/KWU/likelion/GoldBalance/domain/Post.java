@@ -1,6 +1,7 @@
 package KWU.likelion.GoldBalance.domain;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.data.annotation.CreatedDate;
 
@@ -50,4 +51,9 @@ public class Post { // post table과 mapping될 도메인
 
     // vs의 대상 중 오른쪽 개체의 득표수
     private int rightSideVote;
+
+    // 댓글 연결 -> 아래에 구현된 코드는 댓글 대댓글 구분 없이 같은 postId면 다 불러옴...
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "post_id")
+    private List<Comment> commentList;
 }
