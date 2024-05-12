@@ -123,6 +123,7 @@ public class CommentControllerTest {
         List<Comment> returnedComments = commentList.getCommentList();
 
         assertEquals(comments.size(), returnedComments.size());
+
         for (int i = 0; i < comments.size(); i++) {
             Comment returnedComment = returnedComments.get(i);
             assertEquals(postId, returnedComment.getPostId());
@@ -134,7 +135,7 @@ public class CommentControllerTest {
 
     // 대댓글 입력
     @Test
-    public void testSubmitCommentsOfComment() {
+    public void testPostCommentsOfComment() {
 
         // Mock 객체 생성
         CommentService commentService = mock(CommentService.class);
@@ -196,7 +197,7 @@ public class CommentControllerTest {
 
 
         // 테스트 수행
-        ResponseEntity<CommentList> response = commentController.submitComment((long) makeCommentDto.getPostId(), makeCommentDto.getSideInfo(), makeCommentDto);
+        ResponseEntity<CommentList> response = commentController.postComment(makeCommentDto);
 
         System.out.println("요청: " + makeCommentDto);
         System.out.println("응답: " + response.getBody());
@@ -209,7 +210,7 @@ public class CommentControllerTest {
         assertEquals(makeCommentDto.getContent(), argument.getValue().getContent());
         assertEquals(makeCommentDto.getPassword(), argument.getValue().getPassword());
         assertEquals(makeCommentDto.getSideInfo(), argument.getValue().getSideInfo());
-        assertEquals(postId, Long.valueOf(argument.getValue().getPostId()));
+        assertEquals(makeCommentDto.getPostId(), Long.valueOf(argument.getValue().getPostId()));
 
         assertEquals(Long.valueOf(savedComment2.getId()), Long.valueOf(argument.getValue().getParentCommentId()));
     }
@@ -278,7 +279,7 @@ public class CommentControllerTest {
 
 
         // 테스트 수행
-        ResponseEntity<CommentList> response = commentController.submitComment((long) makeCommentDto.getPostId(), makeCommentDto.getSideInfo(), makeCommentDto);
+        ResponseEntity<CommentList> response = commentController.postComment(makeCommentDto);
 
         System.out.println("요청: " + makeCommentDto);
         System.out.println("응답: " + response.getBody());

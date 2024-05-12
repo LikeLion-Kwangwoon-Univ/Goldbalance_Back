@@ -28,7 +28,7 @@ public class CommentController implements CommentOperations{
         this.commentService = commentService;
     }
 
-    //Postid 로 모든 댓글 가져 오기 (10개씩? & 대댓글을 리스트로 다 보여줄 것인지 따로 처리해 줄 것인지?),
+    //postId 로 모든 댓글 가져 오기 (10개씩?)
     @Override
     public ResponseEntity<CommentList> getCommentsByPostId(Long postId) {
         // 모든 댓글 가져오기
@@ -53,48 +53,74 @@ public class CommentController implements CommentOperations{
         return ResponseEntity.ok(commentList);
     }
 
+    // postId, selectSide 에 따른 모든 댓글 가져오기
     @Override
     public ResponseEntity<CommentList> getCommentsByPostIdAndSelectSide(Long postId, int selectSide) {
         // 모든 댓글 가져오기
         List<Comment> allComments = commentService.getAllComment();
 
-        // 해당 postId와 selectSide에 대한 부모 댓글 및 자식 댓글 분리
-        List<Comment> parentComments = allComments.stream()
-                .filter(comment -> Long.valueOf(comment.getPostId()).equals(postId) && comment.getSideInfo() == selectSide && comment.getParentCommentId() == -1)
-                .toList();
-
-        // 각 부모 댓글에 대한 자식 댓글 추가
-        List<Comment> sortedComments = new ArrayList<>();
-        for (Comment parentComment : parentComments) {
-            sortedComments.add(parentComment);
-//            List<Comment> childComments = getChildComments(allComments, parentComment.getId());
-            List<Comment> childComments = commentService.getAllChildComment(parentComment.getId());
-            sortedComments.addAll(childComments);
-        }
+//        // 해당 postId와 selectSide에 대한 부모 댓글 및 자식 댓글 분리
+//        List<Comment> parentComments = allComments.stream()
+//                .filter(comment -> Long.valueOf(comment.getPostId()).equals(postId) && comment.getSideInfo() == selectSide && comment.getParentCommentId() == -1)
+//                .toList();
+//
+//        // 각 부모 댓글에 대한 자식 댓글 추가
+//        List<Comment> sortedComments = new ArrayList<>();
+//        for (Comment parentComment : parentComments) {
+//            sortedComments.add(parentComment);
+////            List<Comment> childComments = getChildComments(allComments, parentComment.getId());
+//            List<Comment> childComments = commentService.getAllChildComment(parentComment.getId());
+//            sortedComments.addAll(childComments);
+//        }
 
         CommentList commentList = new CommentList();
-        commentList.setCommentList(sortedComments);
+//        commentList.setCommentList(sortedComments);
+        commentList.setCommentList(allComments);
         return ResponseEntity.ok(commentList);
 
     }
 
+    // postId, selectSide 에 따른 부모 댓글 가져오기
     @Override
     public ResponseEntity<CommentList> getParentCommentsByPostIdAndSelectSide(Long postId, int selectSide) {
-        return null;
+        // 모든 댓글 가져오기
+        List<Comment> allComments = commentService.getAllComment();
+
+        // 해당 postId에 대한 부모 댓글
+        List<Comment> parentComments = allComments.stream()
+                .filter(comment -> Long.valueOf(comment.getPostId()).equals(postId) && comment.getParentCommentId() == -1)
+                .toList();
+        CommentList commentList = new CommentList();
+        commentList.setCommentList(parentComments);
+        return ResponseEntity.ok(commentList);
     }
 
+    // postId, selectSide, commentId 에 따른 자식 댓글 가져오기
     @Override
-    public ResponseEntity<CommentList> getChildCommentsPostIdAndSelectSide(Long postId, int selectSide) {
-        return null;
+    public ResponseEntity<CommentList> getChildCommentsPostIdAndSelectSide(Long postId, int selectSide,int commentId) {
+        // 모든 댓글 가져오기
+        List<Comment> allComments = commentService.getAllComment();
+
+        // 해당 postId에 대한 부모 댓글
+        List<Comment> childComments = allComments.stream()
+                .filter(comment -> Long.valueOf(comment.getPostId()).equals(postId) && comment.getParentCommentId() == commentId && comment.getSideInfo() == selectSide && comment.getParentCommentId() == -1)
+                .toList();
+
+        CommentList commentList = new CommentList();
+        commentList.setCommentList(childComments);
+        return ResponseEntity.ok(commentList);
     }
 
+    // 댓글 작성 (부모, 자식 댓글 작성) => 따로 만들기 , 오랜된 것부터 정렬해서
     @Override
-    public ResponseEntity<CommentList> submitComment(Long postId, int selectSide, MakeComment makeCommentDto) {
+    public ResponseEntity<CommentList> postComment(MakeComment makeCommentDto) {
 
         // 기존의 댓글 리스트를 가져옴
         List<Comment> postComments = commentService.getAllComment()
                 .stream()
-                .filter(comment -> Long.valueOf(comment.getPostId()).equals(postId)&& comment.getSideInfo() == selectSide)
+                .filter(comment ->
+                        (comment.getPostId()==makeCommentDto.getPostId())
+                                && comment.getSideInfo() == makeCommentDto.getSideInfo())
                 //postId 가 같고 selectSide 가 같은 것 filtering
                 .collect(Collectors.toList());
 
@@ -104,7 +130,7 @@ public class CommentController implements CommentOperations{
         if (makeCommentDto.getParentCommentId() == -1) {
             // 부모 댓글 작성
             Comment comment = new Comment();
-            comment.setPostId(postId.intValue());
+            comment.setPostId(makeCommentDto.getPostId());
             comment.setPassword(makeCommentDto.getPassword());
             comment.setContent(makeCommentDto.getContent());
             comment.setSideInfo(makeCommentDto.getSideInfo());
@@ -117,10 +143,10 @@ public class CommentController implements CommentOperations{
         } else {
             // 대댓글 작성
             Comment parentComment = commentService.getComment(makeCommentDto.getParentCommentId());
-            if (parentComment != null && Long.valueOf(parentComment.getPostId()).equals(postId)) {
+            if (parentComment != null && (parentComment.getPostId())==makeCommentDto.getPostId()) {
                 // 부모 댓글이 존재하고, 해당 부모 댓글이 요청된 게시물에 속한 경우에만 대댓글 작성
                 Comment comment = new Comment();
-                comment.setPostId(postId.intValue());
+                comment.setPostId(makeCommentDto.getPostId());
                 comment.setPassword(makeCommentDto.getPassword());
                 comment.setContent(makeCommentDto.getContent());
                 comment.setSideInfo(makeCommentDto.getSideInfo());
@@ -140,8 +166,9 @@ public class CommentController implements CommentOperations{
         return ResponseEntity.ok(commentList);
     }
 
+    // postId, commentId 에 따른 좋아요 update
     @Override
-    public ResponseEntity<AddLikeCount> updateLikeCount(Long postId, Long commentId, Like likeDto) {
+    public ResponseEntity<AddLikeCount> postLikeCount(Like likeDto) {
         return null;
     }
 }

@@ -10,7 +10,7 @@ public interface PostService {
     Post createPost(Post post);
 
     // 게시물 조회 메소드
-    Post getPost(Long postId);
+    Post getPost(int postId);
 
     // 모든 게시물 조회 메소드 (최신순)
     List<Post> getAllPostByNewest();
