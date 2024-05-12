@@ -4,6 +4,9 @@ import KWU.likelion.GoldBalance.domain.Post;
 import KWU.likelion.GoldBalance.dto.request.MakePost;
 import KWU.likelion.GoldBalance.dto.response.PostInfo;
 import KWU.likelion.GoldBalance.dto.response.PostList;
+import KWU.likelion.GoldBalance.service.PostServiceImpl;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,20 +14,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 @Controller
 @RequestMapping("/")
+@RequiredArgsConstructor
 public class PostController implements PostOperations {
-
-    @Override
+    public final PostServiceImpl postService;
+    @Override //처음에 모든 정보를 받아 투표의 list를 반환함 - 댓글 순
     public ResponseEntity<PostList> getPostsSortedByCommentCount() {
         return null;
     }
 
-    @Override
+    @Override //처음에 모든 정보를 받아 투표의 list를 반환함 - 투표 순
     public ResponseEntity<PostList> getPostsSortedByVoteCount() {
         return null;
     }
 
-    @Override
+    @Override //처음에 모든 정보를 받아 투표의 list를 반환함 - 시간 순
     public ResponseEntity<PostList> getPostsSortedByTime() {
+        return null;
+    }
+
+    @Override // 5퍼 내로 차이나는 게시물을 불러올 수 있는 메서드
+    public ResponseEntity<PostList> getPostsbyCloseVote() {
         return null;
     }
 
@@ -33,7 +42,7 @@ public class PostController implements PostOperations {
         return null;
     }
 
-    @Override //아이디데 대한 post 전달
+    @Override //아이디에 대한 post 전달
     public ResponseEntity<PostInfo> getPostById(String id) {
         return null;
     }
