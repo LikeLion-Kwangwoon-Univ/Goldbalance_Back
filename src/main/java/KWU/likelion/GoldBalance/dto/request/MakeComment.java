@@ -9,9 +9,6 @@ public class MakeComment { // 새로운 댓글이 작성될 때 오는 request
     // 새로운 댓글이 작성된 post의 id
     private int postId;
 
-    // 해당 댓글의 password
-    private String password;
-
     // 해당 댓글의 내용
     private String content;
 
