@@ -28,7 +28,14 @@ public class PostServiceImpl implements PostService{
     // postService 에서 postList 객체로 반환 안하고 List<Post> 로 반환하는데 Service 에서 수정 필요해 보임!!
     @Override
     public List<Post> getAllPostByMostComments() {
-        return null;
+        // 모든 게시물 조회
+        List<Post> allPosts = postRepository.findAll();
+
+        // 각 게시물의 댓글 수를 계산하고, 댓글 수 기준으로 게시물 정렬
+        // 댓글이 가장 많은 게시물이 리스트의 첫 번째 요소로 반환
+        allPosts.sort((post1, post2) -> post2.getCommentList().size() - post1.getCommentList().size());
+
+        return allPosts;
     }
     // #####[수정]#######
     // postService 에서 postList 객체로 반환 안하고 List<Post> 로 반환하는데 Service 에서 수정 필요해 보임!!

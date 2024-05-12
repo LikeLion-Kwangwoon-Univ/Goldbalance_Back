@@ -98,18 +98,20 @@ class CommentServiceImplTest {
         // Comment 객체 생성
         Comment comment1 = new Comment();
         comment1.setId(1);
+        comment1.setPostId(1);
 
         Comment comment2 = new Comment();
         comment2.setId(2);
+        comment2.setPostId(1);
 
         List<Comment> expectedComments = Arrays.asList(comment1, comment2);
 
-        // CommentRepository의 findAll 메소드가 호출되면 미리 생성한 Comment 객체들을 반환하도록 설정
-        when(commentRepository.findAll()).thenReturn(expectedComments);
+        // CommentRepository의 findByPostId 메소드가 호출되면 미리 생성한 Comment 객체들을 반환하도록 설정
+        when(commentRepository.findByPostId(anyInt())).thenReturn(expectedComments);
 
         // when
         // getAllComment 메소드를 호출하고 반환값을 저장
-        List<Comment> actualComments = commentService.getAllComment();
+        List<Comment> actualComments = commentService.getAllComment(1);
 
         // then
         // 반환된 댓글 리스트가 예상한 댓글 리스트와 일치하는지 확인
