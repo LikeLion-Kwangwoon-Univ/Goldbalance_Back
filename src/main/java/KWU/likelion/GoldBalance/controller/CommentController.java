@@ -4,7 +4,6 @@ import KWU.likelion.GoldBalance.domain.Comment;
 import KWU.likelion.GoldBalance.domain.Post;
 import KWU.likelion.GoldBalance.dto.request.Like;
 import KWU.likelion.GoldBalance.dto.request.MakeComment;
-import KWU.likelion.GoldBalance.dto.response.AddLikeCount;
 import KWU.likelion.GoldBalance.dto.response.CommentList;
 import KWU.likelion.GoldBalance.service.CommentService;
 import lombok.RequiredArgsConstructor;

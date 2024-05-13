@@ -42,7 +42,6 @@ public class CommentControllerTest {
         Comment comment1 = new Comment();
         comment1.setId(1);
         comment1.setPostId(postId.intValue());
-        comment1.setPassword("pw1");
         comment1.setCreatedDateTime(date1);//오래됨
         comment1.setChildCount(1);
         comment1.setContent("post1,comment1");
@@ -53,7 +52,6 @@ public class CommentControllerTest {
         Comment comment2 = new Comment();
         comment2.setId(2);
         comment2.setPostId(postId.intValue());
-        comment2.setPassword("pw2");
         comment2.setCreatedDateTime(date2);//최신
         comment2.setContent("post1,comment2");
         comment2.setSideInfo(0);
@@ -132,7 +130,6 @@ public class CommentControllerTest {
         Comment comment4 = new Comment();
         comment4.setId(4);
         comment4.setPostId(postId.intValue());
-        comment4.setPassword("pw1-2");
         comment4.setCreatedDateTime(date4);
         comment4.setContent("post1,comment2-1");
         comment4.setSideInfo(0);
