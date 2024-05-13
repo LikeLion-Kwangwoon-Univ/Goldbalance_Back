@@ -42,6 +42,16 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
+    public Comment unlikeComment(int commentId) {
+        // commentId에 해당하는 Comment객체의 좋아요 수를 1 감소하고 저장
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
+
+        comment.setLikeCount(comment.getLikeCount() - 1);
+        return commentRepository.save(comment);
+    }
+
+    @Override
     public List<Comment> getAllComment(int postId) {
         // 모든 Comment 객체를 조회하여 List<Comment>로 반환
         return commentRepository.findByPostId(postId);
