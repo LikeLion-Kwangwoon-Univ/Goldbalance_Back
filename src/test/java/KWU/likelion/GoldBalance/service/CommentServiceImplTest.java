@@ -52,6 +52,26 @@ class CommentServiceImplTest {
     }
 
     @Test
+    public void testIncreaseChildCount() {
+        // given
+        // 부모 댓글 객체를 생성하고 초기 childCount를 설정
+        Comment parentComment = new Comment();
+        parentComment.setId(1);
+        parentComment.setChildCount(0);
+
+        // 미리 생성한 부모 댓글 객체를 반환하도록 설정
+        when(commentRepository.findById(anyInt())).thenReturn(Optional.of(parentComment));
+        when(commentRepository.save(any(Comment.class))).thenAnswer(i -> i.getArguments()[0]);
+
+        // when
+        // increaseChildCount 메소드를 호출하고 반환값을 저장
+        Comment updatedComment = commentService.increaseChildCount(1);
+
+        // then
+        assertEquals(1, updatedComment.getChildCount());
+    }
+
+    @Test
     public void testGetComment() {
         // given
         // Comment 객체 생성
