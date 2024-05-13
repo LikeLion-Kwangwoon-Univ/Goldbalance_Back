@@ -4,7 +4,6 @@ import KWU.likelion.GoldBalance.domain.Comment;
 import KWU.likelion.GoldBalance.domain.Post;
 import KWU.likelion.GoldBalance.dto.request.Like;
 import KWU.likelion.GoldBalance.dto.request.MakeComment;
-import KWU.likelion.GoldBalance.dto.response.AddLikeCount;
 import KWU.likelion.GoldBalance.dto.response.CommentList;
 import KWU.likelion.GoldBalance.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -131,13 +130,13 @@ public class CommentController implements CommentOperations{
             // 부모 댓글이 존재하고, 해당 부모 댓글이 요청된 게시물에 속한 경우에만 대댓글 작성
             if (makeCommentDto.getParentCommentId() != -1
                     && parentComment != null
-                    && parentComment.getPostId() == makeCommentDto.getPostId()) { //부모 댓글이 아닌 경우
+                    && parentComment.getPostId() == postId) { //부모 댓글이 아닌 경우
 
                 // 해당 postId의 기존 대댓글 리스트를 가져옴
                 List<Comment> postComments = commentService.getAllChildComment(makeCommentDto.getParentCommentId())
                         .stream()
                         .filter(comment ->
-                                comment.getPostId() == makeCommentDto.getPostId()
+                                comment.getPostId() == postId
                                         && comment.getSideInfo() == makeCommentDto.getSideInfo()
                         )
                         .collect(Collectors.toList());
@@ -171,10 +170,10 @@ public class CommentController implements CommentOperations{
 
     // postId, commentId 에 따른 좋아요 update(추가, 삭제)
     @Override
-    public ResponseEntity<String> postLikeCount( Like likeDto, Long postId, Long like) {
+    public ResponseEntity<String> postLikeCount( Like likeDto, Long postId, Long commentId, Long like) {
         try {
             if (like == 1) {//like 증가
-                commentService.likeComment(likeDto.getCommentId());
+                commentService.likeComment(commentId.intValue());
                 return ResponseEntity.ok("좋아요 증가에 성공했습니다.");
             } else if (like == 0) {//like 감소
                 // sevice 메서드 추가 필요

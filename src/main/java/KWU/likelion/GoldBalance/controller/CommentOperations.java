@@ -25,6 +25,6 @@ public interface CommentOperations {
 
     // 좋아요 눌렸을 때, 좋아요 수 update
     @PostMapping("{postId}/comment/{commentId}/liked/{like}")
-    ResponseEntity<String> postLikeCount( @RequestBody Like likeDto,@PathVariable Long postId,@PathVariable Long like);
+    ResponseEntity<String> postLikeCount( @RequestBody Like likeDto,@PathVariable Long postId,@PathVariable Long commentId,@PathVariable Long like);
 
 }
