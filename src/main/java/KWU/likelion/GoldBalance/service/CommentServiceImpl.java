@@ -25,6 +25,17 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
+    public Comment increaseChildCount(int parentCommentId) {
+        // parentCommentId에 해당하는 Comment 객체의 childCount를 1 증가하고 저장
+        Comment parentComment = commentRepository.findById(parentCommentId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
+
+        parentComment.setChildCount(parentComment.getChildCount() + 1);
+        return commentRepository.save(parentComment);
+    }
+
+
+    @Override
     public Comment getComment(int commentId) {
         // commentId에 해당하는 Comment 객체를 데베에서 조회 -> 없다면 예외처리
         return commentRepository.findById(commentId)
@@ -38,6 +49,16 @@ public class CommentServiceImpl implements CommentService{
                 .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
 
         comment.setLikeCount(comment.getLikeCount() + 1);
+        return commentRepository.save(comment);
+    }
+
+    @Override
+    public Comment unlikeComment(int commentId) {
+        // commentId에 해당하는 Comment객체의 좋아요 수를 1 감소하고 저장
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
+
+        comment.setLikeCount(comment.getLikeCount() - 1);
         return commentRepository.save(comment);
     }
 
