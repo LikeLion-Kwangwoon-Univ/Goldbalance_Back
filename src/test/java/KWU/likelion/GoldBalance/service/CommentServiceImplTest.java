@@ -93,6 +93,29 @@ class CommentServiceImplTest {
     }
 
     @Test
+    public void testUnlikeComment(){
+        // given
+        // Comment 객체 생성
+        Comment comment = new Comment();
+        comment.setId(1);
+        comment.setLikeCount(1);
+
+        // CommentRepository의 findById 메소드가 호출되면 미리 생성한 Comment 객체를 반환하도록 설정
+        when(commentRepository.findById(anyInt())).thenReturn(Optional.of(comment));
+
+        // CommentRepository의 save 메소드가 호출될 때 미리 생성한 Comment 객체를 반환하도록 설정
+        // unlikeComment 메소드가 null을 반환하는 문제 해결
+        when(commentRepository.save(any(Comment.class))).thenAnswer(i -> i.getArguments()[0]);
+
+        // when
+        // unlikeComment 메소드를 호출하고 반환값을 저장
+        Comment unlikedComment = commentService.unlikeComment(1);
+
+        // then
+        assertEquals(0, unlikedComment.getLikeCount());
+    }
+
+    @Test
     public void testGetAllComment() {
         // given
         // Comment 객체 생성
