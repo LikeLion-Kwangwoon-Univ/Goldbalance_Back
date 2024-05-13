@@ -9,6 +9,9 @@ public interface CommentService {
     // 댓글 생성 메소드
     Comment createComment(Comment comment);
 
+    // 대댓글 수(childCount) 증가 메소드
+    Comment increaseChildCount(int parentCommentId);
+
     // 댓글 조회 메소드
     Comment getComment(int commentId);
 
