@@ -18,4 +18,3 @@ public class MakePost { // 밸런스 게임 생성할 때 오는 request
     // 오른쪽 요소의 설명
     private String rightSideDetail;
 }
-
