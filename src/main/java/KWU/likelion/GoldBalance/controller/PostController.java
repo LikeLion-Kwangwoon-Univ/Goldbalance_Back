@@ -6,6 +6,8 @@ import KWU.likelion.GoldBalance.dto.response.PostInfo;
 import KWU.likelion.GoldBalance.dto.response.PostList;
 import KWU.likelion.GoldBalance.service.PostServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Length;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -13,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 @Controller
 @RequestMapping("/posts")
 @RequiredArgsConstructor
@@ -31,28 +36,34 @@ public class PostController implements PostOperations {
 
     @Override //처음에 모든 정보를 받아 투표의 list를 반환함 - 투표 순
     public ResponseEntity<PostList> getPostsSortedByVoteCount(@RequestParam int cursor) {
-        List<Post> postList = postService.getAllPostByMostVotes(cursor, 10); //커서 대로 인덱스 맞춰서 주기
+        int size = 10;
+        List<Post> postList = postService.getAllPostByMostVotes(cursor, size); //커서 대로 인덱스 맞춰서 주기
         PostList postList1 = new PostList();
         postList1.setPostList(postList);
-
+        if (postList1.getPostList().size() % size != 0) postList1.setLastCursor(-1);//만약 마지막 페이지면? 필드에 -1 반환
+        else postList1.setLastCursor(0);
         return new ResponseEntity<>(postList1, HttpStatus.OK);
     }
 
     @Override //처음에 모든 정보를 받아 투표의 list를 반환함 - 시간 순
     public ResponseEntity<PostList> getPostsSortedByTime(@RequestParam int cursor) {
-        List<Post> postList = postService.getAllPostByMostVotes(cursor, 10); //커서 대로 인덱스 맞춰서 주기
+        int size = 10;
+        Page<Post> postPage = postService.getAllPostByNewest(cursor, size); //커서 대로 인덱스 맞춰서 주기
         PostList postList1 = new PostList();
-        postList1.setPostList(postList);
-
+        postList1.setPostList(postPage.getContent());
+        if (postList1.getPostList().size() % size != 0) postList1.setLastCursor(-1);//만약 마지막 페이지면? 필드에 -1 반환
+        else postList1.setLastCursor(0);
         return new ResponseEntity<>(postList1, HttpStatus.OK);
     }
 
     @Override // 5퍼 내로 차이나는 게시물을 불러올 수 있는 메서드
     public ResponseEntity<PostList> getPostsbyCloseVote(@RequestParam int cursor) {
-        List<Post> postList = postService.getAllPostByMostVotes(cursor, 10); //커서 대로 인덱스 맞춰서 주기
+        int size = 10;
+        List<Post> postList = postService.getAllPostByCloseVote(cursor, size); //커서 대로 인덱스 맞춰서 주기
         PostList postList1 = new PostList();
         postList1.setPostList(postList);
-
+        if (postList1.getPostList().size() % size != 0) postList1.setLastCursor(-1); //만약 마지막 페이지면? 필드에 -1 반환
+        else postList1.setLastCursor(0);
         return new ResponseEntity<>(postList1, HttpStatus.OK);
     }
 
