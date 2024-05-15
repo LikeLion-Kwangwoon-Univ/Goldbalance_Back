@@ -9,11 +9,17 @@ public interface CommentService {
     // 댓글 생성 메소드
     Comment createComment(Comment comment);
 
+    // 대댓글 수(childCount) 증가 메소드
+    Comment increaseChildCount(int parentCommentId);
+
     // 댓글 조회 메소드
     Comment getComment(int commentId);
 
     // 댓글 좋아요 메소드
     Comment likeComment(int commentId);
+
+    // 댓글 좋아요 취소 메소드
+    Comment unlikeComment(int commentId);
 
     // post_id에 해당하는 모든 댓글 조회 메소드
     List<Comment> getAllComment(int postId);
