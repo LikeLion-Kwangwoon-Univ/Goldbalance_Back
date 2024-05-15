@@ -7,6 +7,7 @@ import KWU.likelion.GoldBalance.dto.response.PostList;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 @RequestMapping("/default") //투표 게시물에 대한 controller
 public interface PostOperations {
 
