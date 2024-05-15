@@ -84,13 +84,8 @@ public class CommentController implements CommentOperations{
             if (makeCommentDto.getParentCommentId() == -1) { //부모 댓글에 대한 request가 맞는 지 check
                 // 해당 postId의 기존 댓글 리스트를 가져옴
                 List<Comment> postComments = commentService.getAllComment(postId.intValue());
-//                        .stream()
-//                        .filter(comment ->
-//                                comment.getPostId() == makeCommentDto.getPostId())
-//                        .collect(Collectors.toList());
 
                 CommentList commentList = new CommentList();
-//                commentList.setCommentList(postComments); // 기존의 댓글 리스트를 설정
 
                 // 부모 댓글 작성
                 Comment comment = new Comment();
@@ -106,9 +101,8 @@ public class CommentController implements CommentOperations{
 
                 // commentList를 createdTime을 기준으로 오름차순으로 정렬
                 postComments.sort(Comparator.comparing(Comment::getCreatedDateTime));
-                // 새로운 댓글을 기존의 CommentList에 추가합니다.
+                // 새로운 댓글을 기존의 CommentList에 추가
                 commentList.setCommentList(postComments); // 기존의 댓글 리스트를 설정
-
 
                 // 새로운 댓글이 추가된 CommentList를 ResponseEntity로 반환
                 return ResponseEntity.ok(commentList);
@@ -141,8 +135,8 @@ public class CommentController implements CommentOperations{
                         )
                         .collect(Collectors.toList());
 
-                //대댓글이 추가되면 childCount + 1 => service 구현 필요!!!
-                parentComment.setChildCount(parentComment.getChildCount()+1);
+                //대댓글이 추가되면 부모의 childCount + 1
+                commentService.increaseChildCount(makeCommentDto.getParentCommentId());
 
                 CommentList commentList = new CommentList();
                 Comment comment = new Comment();
@@ -157,7 +151,6 @@ public class CommentController implements CommentOperations{
 
                 // commentList를 createdTime을 기준으로 오름차순으로 정렬
                 postComments.sort(Comparator.comparing(Comment::getCreatedDateTime));
-
                 commentList.setCommentList(postComments); // 기존의 댓글 리스트를 설정
                 return ResponseEntity.ok(commentList);
             } else {
@@ -176,7 +169,7 @@ public class CommentController implements CommentOperations{
                 commentService.likeComment(commentId.intValue());
                 return ResponseEntity.ok("좋아요 증가에 성공했습니다.");
             } else if (like == 0) {//like 감소
-                // sevice 메서드 추가 필요
+                commentService.unlikeComment(commentId.intValue());
                 return ResponseEntity.ok("좋아요 감소에 성공했습니다.");
 
             } else {//유효하지 않은 값
