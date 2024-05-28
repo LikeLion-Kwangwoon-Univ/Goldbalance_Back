@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/select")
+@RequestMapping("goldbalance/select")
 @RequiredArgsConstructor
 public class VoteController implements VoteOperations {
     private final VoteServiceImpl voteService;

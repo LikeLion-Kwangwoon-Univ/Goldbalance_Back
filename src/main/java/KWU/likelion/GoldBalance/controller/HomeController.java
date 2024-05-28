@@ -18,6 +18,7 @@ import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("goldbalance")
 public class HomeController implements HomeOperations{
     public final PostServiceImpl postService;
     @Override

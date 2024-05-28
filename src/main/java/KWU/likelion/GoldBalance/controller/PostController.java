@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/posts")
+@RequestMapping("/goldbalance/posts")
 @RequiredArgsConstructor
 public class PostController implements PostOperations {
     public final PostServiceImpl postService;
