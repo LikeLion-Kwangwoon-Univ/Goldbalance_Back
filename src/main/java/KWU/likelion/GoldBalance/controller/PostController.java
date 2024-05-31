@@ -68,7 +68,7 @@ public class PostController implements PostOperations {
     }
 
     @Override //투표 게시물 저장
-    public ResponseEntity<String> submitPost(MakePost makePost) {
+    public ResponseEntity<Integer> submitPost(MakePost makePost) {
 
         Post post = new Post();
         post.setPostTitle(makePost.getLeftSideTitle() + " vs " + makePost.getRightSideTitle());
@@ -77,8 +77,9 @@ public class PostController implements PostOperations {
         post.setRightSideTitle(makePost.getRightSideTitle());
         post.setRightSideDetail(makePost.getRightSideDetail());
         post.setCreatedDateTime(LocalDateTime.now());
-        postService.createPost(post);
-        return ResponseEntity.ok("저장완료");
+        Post createdPost = postService.createPost(post);
+        Integer postId = createdPost.getId();
+        return new ResponseEntity<>(postId, HttpStatus.OK);
     }
 
     @Override //아이디에 대한 post 전달
