@@ -18,6 +18,7 @@ import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("goldbalance")
 public class HomeController implements HomeOperations{
     public final PostServiceImpl postService;
     @Override
@@ -34,7 +35,7 @@ public class HomeController implements HomeOperations{
         allPostList2.setPostList(postsHot);
         allPostListList.add(allPostList2);
         AllPostList allPostList3 = new AllPostList();
-        Page<Post> postPage = postService.getAllPostByNewest(0, 1); //최근
+        Page<Post> postPage = postService.getAllPostByNewest(0, 4); //최근
         allPostList3.setSubject("최근 balance");
         allPostList3.setPostList(postPage.getContent());
         allPostListList.add(allPostList3);

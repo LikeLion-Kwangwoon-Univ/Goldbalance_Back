@@ -7,6 +7,8 @@ import KWU.likelion.GoldBalance.dto.response.PostList;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 
 @RequestMapping("/default") //투표 게시물에 대한 controller
 public interface PostOperations {
@@ -21,7 +23,7 @@ public interface PostOperations {
     @GetMapping("/balance") // 5퍼 내로 차이나는 게시물을 불러올 수 있는 메서드
     ResponseEntity<PostList> getPostsbyCloseVote(@RequestParam int cursor);
     @PostMapping("/make") //투표 게시물 저장
-    ResponseEntity<String> submitPost(@RequestBody MakePost makePost);
+    ResponseEntity<Integer> submitPost(@RequestBody MakePost makePost);
 
     @GetMapping("{id}") //아이디데 대한 post 전달
     ResponseEntity<PostInfo> getPostById(@PathVariable String id);
